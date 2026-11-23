@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rayyan Play — Games &amp; Apps Store</title>
+    <meta name="description" content="Rayyan Play — Games and Apps Store.">
+    <meta name="application-name" content="Rayyan Play">
+    <meta property="og:title" content="Rayyan Play — Games &amp; Apps Store">
+    <meta property="og:site_name" content="Rayyan Play">
+    <meta property="og:image" content="logo.jpg">
+    <link rel="icon" type="image/jpeg" href="logo.jpg">
+    <link rel="apple-touch-icon" href="logo.jpg">
+    <style>
+        :root {
+            --bg: #f8fafc;
+            --surface: #ffffff;
+            --surface-2: #f1f5f9;
+            --text: #0f172a;
+            --muted: #5f6368;
+            --border: #e2e8f0;
+            --primary: #0b57d0;
+            --primary-hover: #0842a0;
+            --primary-soft: #e8f0fe;
+            --green: #0f766e;
+            --green-soft: #ccfbf1;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            padding-bottom: 60px;
+        }
+
+        /* Top Play Store Header */
+        header {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+        }
+
+        .top-bar {
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 12px 20px 8px;
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            flex-wrap: wrap;
+        }
+
+        .store-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text);
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .brand-logo-img {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            object-fit: cover;
+            border: 1px solid var(--border);
+            box-shadow: 0 2px 6px rgba(15, 23, 42, 0.12);
+        }
+
+        .search-wrap {
+            flex: 1;
+            min-width: 240px;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            height: 44px;
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            background: var(--surface-2);
+            padding: 0 18px 0 42px;
+            font-size: 0.95rem;
+            color: var(--text);
+            outline: none;
+            transition: background 0.15s, border-color 0.15s, box-shadow 0.15s;
+        }
+
+        .search-input:focus {
+            background: var(--surface);
+            border-color: var(--primary);
+            box-shadow: 0 1px 6px rgba(11, 87, 208, 0.15);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--muted);
+            font-size: 0.95rem;
+            pointer-events: none;
+        }
+
+        /* Category Tabs (Games, Apps, Publish) */
+        .nav-tabs {
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            gap: 24px;
+            overflow-x: auto;
+        }
+
+        .nav-tab {
+            background: transparent;
+            border: none;
+            padding: 12px 4px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--muted);
+            cursor: pointer;
+            position: relative;
+            white-space: nowrap;
+            transition: color 0.15s;
+        }
+
+        .nav-tab:hover {
+            color: var(--text);
+        }
+
+        .nav-tab.active {
+            color: var(--primary);
+        }
+
+        .nav-tab.active::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 3px;
+            border-radius: 3px 3px 0 0;
+            background: var(--primary);
+        }
+
+        /* Main Container */
+        main {
+            max-width: 1180px;
+            margin: 24px auto 0;
+            padding: 0 20px;
+        }
+
+        .section-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 18px;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .section-head h1 {
+            font-size: 1.35rem;
+            font-weight: 600;
+        }
+
+        .count-pill {
+            font-size: 0.82rem;
+            color: var(--muted);
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 5px 12px;
+            border-radius: 999px;
+        }
+
+        /* Play Store App/Game Grid */
+        .store-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+            gap: 16px;
+        }
+
+        .store-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            cursor: pointer;
+            transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+        }
+
+        .store-card:hover {
+            transform: translateY(-2px);
+            border-color: #cbd5e1;
+            box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
+        }
+
+        .card-top {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .app-icon {
+            width: 58px;
+            height: 58px;
+            border-radius: 14px;
+            background: var(--primary-soft);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.35rem;
+            font-weight: 700;
+            flex-shrink: 0;
+            overflow: hidden;
+        }
+
+        .app-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .card-meta {
+            min-width: 0;
+        }
+
+        .card-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .card-dev {
+            font-size: 0.82rem;
+            color: var(--muted);
+            margin-top: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .card-tag {
+            display: inline-block;
+            margin-top: 5px;
+            font-size: 0.72rem;
+            font-weight: 600;
+            color: var(--green);
+            background: var(--green-soft);
+            padding: 2px 8px;
+            border-radius: 999px;
+        }
+
+        .card-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 4px;
+        }
+
+        .rating-text {
+            font-size: 0.8rem;
+            color: var(--muted);
+            font-weight: 500;
+        }
+
+        .install-btn {
+            background: var(--primary-soft);
+            color: var(--primary);
+            border: none;
+            padding: 7px 14px;
+            border-radius: 999px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background 0.15s, color 0.15s;
+        }
+
+        .install-btn:hover {
+            background: var(--primary);
+            color: #ffffff;
+        }
+
+        /* Empty State */
+        .empty-box {
+            background: var(--surface);
+            border: 1px dashed #cbd5e1;
+            border-radius: 16px;
+            padding: 48px 24px;
+            text-align: center;
+        }
+
+        .empty-box h2 {
+            font-size: 1.15rem;
+            margin-bottom: 8px;
+        }
+
+        .empty-box p {
+            color: var(--muted);
+            font-size: 0.92rem;
+            max-width: 460px;
+            margin: 0 auto 20px;
+            line-height: 1.5;
+        }
+
+        .primary-btn {
+            background: var(--primary);
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 999px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .primary-btn:hover {
+            background: var(--primary-hover);
+        }
+
+        /* Publish Form Card */
+        .publish-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+            max-width: 680px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 14px;
+        }
+
+        .field {
+            margin-bottom: 14px;
+        }
+
+        .field label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: var(--text);
+        }
+
+        .field input,
+        .field select,
+        .field textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border-radius: 10px;
+            border: 1px solid #cbd5e1;
+            background: var(--bg);
+            color: var(--text);
+            font-size: 0.92rem;
+            outline: none;
+        }
+
+        .field input:focus,
+        .field select:focus,
+        .field textarea:focus {
+            border-color: var(--primary);
+            background: var(--surface);
+        }
+
+        .field textarea {
+            min-height: 90px;
+            resize: vertical;
+        }
+
+        .helper-box {
+            margin-top: 18px;
+            padding: 12px 14px;
+            border-radius: 10px;
+            background: var(--surface-2);
+            font-size: 0.82rem;
+            color: var(--muted);
+            line-height: 1.5;
+        }
+
+        /* Detail Modal */
+        .modal-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.45);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            z-index: 50;
+        }
+
+        .modal-backdrop.open {
+            display: flex;
+        }
+
+        .modal-card {
+            background: var(--surface);
+            border-radius: 18px;
+            max-width: 500px;
+            width: 100%;
+            padding: 22px;
+            box-shadow: 0 20px 40px rgba(15, 23, 42, 0.2);
+        }
+
+        .modal-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 14px;
+        }
+
+        .close-btn {
+            background: var(--surface-2);
+            border: none;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            font-size: 1rem;
+            cursor: pointer;
+            color: var(--text);
+        }
+
+        .modal-desc {
+            font-size: 0.92rem;
+            color: #334155;
+            line-height: 1.55;
+            margin-bottom: 18px;
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="top-bar">
+            <div class="store-logo" onclick="selectTab('games')">
+                <img src="logo.jpg" alt="Rayyan Play Logo" class="brand-logo-img" onerror="this.style.display='none'">
+                <span>Rayyan Play</span>
+            </div>
+
+            <div class="search-wrap">
+                <span class="search-icon">&#128269;</span>
+                <input
+                    type="text"
+                    id="search-input"
+                    class="search-input"
+                    placeholder="Search Rayyan Play..."
+                    oninput="renderAll()"
+                >
+            </div>
+        </div>
+
+        <nav class="nav-tabs">
+            <button class="nav-tab active" data-tab="games" onclick="selectTab('games')">Games</button>
+            <button class="nav-tab" data-tab="apps" onclick="selectTab('apps')">Apps</button>
+            <button class="nav-tab" data-tab="publish" onclick="selectTab('publish')">Publish</button>
+        </nav>
+    </header>
+
+    <main>
+        <!-- GAMES TAB -->
+        <section id="section-games">
+            <div class="section-head">
+                <h1>Games</h1>
+                <span class="count-pill" id="games-count">0 items</span>
+            </div>
+            <div id="games-container"></div>
+        </section>
+
+        <!-- APPS TAB -->
+        <section id="section-apps" class="hidden">
+            <div class="section-head">
+                <h1>Apps</h1>
+                <span class="count-pill" id="apps-count">0 items</span>
+            </div>
+            <div id="apps-container"></div>
+        </section>
+
+        <!-- PUBLISH TAB -->
+        <section id="section-publish" class="hidden">
+            <div class="section-head">
+                <h1>Publish to Rayyan Play</h1>
+                <span class="count-pill">New Release</span>
+            </div>
+
+            <div class="publish-card">
+                <form id="publish-form" onsubmit="publishItem(event)">
+                    <div class="form-grid">
+                        <div class="field">
+                            <label for="pub-category">Section</label>
+                            <select id="pub-category" required>
+                                <option value="game">Games</option>
+                                <option value="app">Apps</option>
+                            </select>
+                        </div>
+
+                        <div class="field">
+                            <label for="pub-title">Name</label>
+                            <input type="text" id="pub-title" placeholder="Enter game or app name" required>
+                        </div>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="field">
+                            <label for="pub-developer">Developer</label>
+                            <input type="text" id="pub-developer" placeholder="Creator name" required>
+                        </div>
+
+                        <div class="field">
+                            <label for="pub-icon">Icon URL (Optional)</label>
+                            <input type="url" id="pub-icon" placeholder="https://...">
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label for="pub-link">Play / Download URL</label>
+                        <input type="url" id="pub-link" placeholder="https://..." required>
+                    </div>
+
+                    <div class="field">
+                        <label for="pub-desc">About this item</label>
+                        <textarea id="pub-desc" placeholder="Write a short description..." required></textarea>
+                    </div>
+
+                    <button type="submit" class="primary-btn">Publish Item</button>
+                </form>
+
+                <div class="helper-box">
+                    <strong>Tip:</strong> Apni logo image ko <code>logo.jpg</code> naam se <code>index.html</code> ke saath rakhein. Naye items permanent live karne ke liye un entries ko <code>storeData</code> array mein daal kar commit karein.
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- DETAIL MODAL -->
+    <div id="detail-modal" class="modal-backdrop" onclick="closeModal(event)">
+        <div class="modal-card" onclick="event.stopPropagation()">
+            <div class="modal-top">
+                <div class="card-top">
+                    <div id="modal-icon" class="app-icon"></div>
+                    <div class="card-meta">
+                        <div id="modal-title" class="card-title"></div>
+                        <div id="modal-dev" class="card-dev"></div>
+                    </div>
+                </div>
+                <button class="close-btn" onclick="hideModal()">&#10005;</button>
+            </div>
+            <p id="modal-desc" class="modal-desc"></p>
+            <div class="modal-actions">
+                <a id="modal-link" href="#" target="_blank" rel="noopener noreferrer" class="primary-btn">Open</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Filhaal bilkul khali rakha hai — jab nayi game/app banao to yahan add karte jana
+        const storeData = [];
+
+        let currentTab = "games";
+
+        function selectTab(tab) {
+            currentTab = tab;
+
+            document.querySelectorAll(".nav-tab").forEach(btn => {
+                btn.classList.toggle("active", btn.dataset.tab === tab);
+            });
+
+            document.getElementById("section-games").classList.toggle("hidden", tab !== "games");
+            document.getElementById("section-apps").classList.toggle("hidden", tab !== "apps");
+            document.getElementById("section-publish").classList.toggle("hidden", tab !== "publish");
+        }
+
+        function getFilteredItems(category) {
+            const q = document.getElementById("search-input").value.trim().toLowerCase();
+            return storeData.filter(item => {
+                const matchesCategory = item.category === category;
+                const matchesQuery =
+                    !q ||
+                    item.title.toLowerCase().includes(q) ||
+                    item.developer.toLowerCase().includes(q) ||
+                    item.description.toLowerCase().includes(q);
+                return matchesCategory && matchesQuery;
+            });
+        }
+
+        function renderSection(category, containerId, countId, emptyTitle, emptyText) {
+            const container = document.getElementById(containerId);
+            const countEl = document.getElementById(countId);
+            const items = getFilteredItems(category);
+
+            countEl.textContent = `${items.length} ${items.length === 1 ? "item" : "items"}`;
+
+            if (items.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-box">
+                        <h2>${escapeHtml(emptyTitle)}</h2>
+                        <p>${escapeHtml(emptyText)}</p>
+                        <button class="primary-btn" onclick="selectTab('publish')">Publish New Item</button>
+                    </div>
+                `;
+                return;
+            }
+
+            const grid = document.createElement("div");
+            grid.className = "store-grid";
+
+            items.forEach(item => {
+                const card = document.createElement("div");
+                card.className = "store-card";
+                card.onclick = () => openModal(item);
+
+                const initial = escapeHtml((item.title || "?").charAt(0).toUpperCase());
+                const iconHtml = item.icon
+                    ? `<img src="${escapeAttr(item.icon)}" alt="${escapeAttr(item.title)}" onerror="this.parentElement.innerHTML='${initial}'">`
+                    : initial;
+
+                card.innerHTML = `
+                    <div class="card-top">
+                        <div class="app-icon">${iconHtml}</div>
+                        <div class="card-meta">
+                            <div class="card-title">${escapeHtml(item.title)}</div>
+                            <div class="card-dev">${escapeHtml(item.developer)}</div>
+                            <span class="card-tag">${category === "game" ? "Game" : "App"}</span>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <span class="rating-text">New</span>
+                        <a class="install-btn" href="${escapeAttr(item.link)}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()">
+                            ${category === "game" ? "Play" : "Get"}
+                        </a>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+
+            container.innerHTML = "";
+            container.appendChild(grid);
+        }
+
+        function renderAll() {
+            renderSection(
+                "game",
+                "games-container",
+                "games-count",
+                "No games added yet",
+                "Jab tum apni nayi games bana kar add karoge ya publish karoge, yahan show hongi."
+            );
+            renderSection(
+                "app",
+                "apps-container",
+                "apps-count",
+                "No apps added yet",
+                "Yahan tumhare apps aur tools show honge."
+            );
+        }
+
+        function publishItem(event) {
+            event.preventDefault();
+
+            const category = document.getElementById("pub-category").value;
+            const title = document.getElementById("pub-title").value.trim();
+            const developer = document.getElementById("pub-developer").value.trim();
+            const icon = document.getElementById("pub-icon").value.trim();
+            const link = document.getElementById("pub-link").value.trim();
+            const description = document.getElementById("pub-desc").value.trim();
+
+            if (!title || !developer || !link || !description) return;
+
+            storeData.unshift({ category, title, developer, icon, link, description });
+            renderAll();
+            document.getElementById("publish-form").reset();
+            selectTab(category === "game" ? "games" : "apps");
+        }
+
+        function openModal(item) {
+            const initial = escapeHtml((item.title || "?").charAt(0).toUpperCase());
+            const modalIcon = document.getElementById("modal-icon");
+            modalIcon.innerHTML = item.icon
+                ? `<img src="${escapeAttr(item.icon)}" alt="${escapeAttr(item.title)}" onerror="this.parentElement.innerHTML='${initial}'">`
+                : initial;
+
+            document.getElementById("modal-title").textContent = item.title;
+            document.getElementById("modal-dev").textContent = item.developer;
+            document.getElementById("modal-desc").textContent = item.description;
+            document.getElementById("modal-link").href = item.link;
+            document.getElementById("detail-modal").classList.add("open");
+        }
+
+        function hideModal() {
+            document.getElementById("detail-modal").classList.remove("open");
+        }
+
+        function closeModal(event) {
+            if (event.target.id === "detail-modal") {
+                hideModal();
+            }
+        }
+
+        function escapeHtml(str) {
+            return String(str)
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;");
+        }
+
+        function escapeAttr(str) {
+            return String(str).replace(/"/g, "&quot;");
+        }
+
+        renderAll();
+    </script>
+
+</body>
+</html>
